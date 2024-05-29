@@ -5,8 +5,18 @@ package javagl;
 
 import org.lwjgl.Version;
 
+import javagl.core.WindowManager;
+
 public class App {
     public static void main(String[] args) {
         System.out.println(Version.getVersion());
+        WindowManager window = new WindowManager("Engine", 1920, 1080, false);
+        window.init();
+
+        while (!window.windowShouldClose()) {
+            window.update();
+        }
+        
+        window.cleanup();
     }
 }
