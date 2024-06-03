@@ -5,18 +5,33 @@ package javagl;
 
 import org.lwjgl.Version;
 
-import javagl.core.WindowManager;
+import javagl.core.managers.EngineManager;
+import javagl.core.managers.WindowManager;
+import javagl.core.utils.Constants;
 
 public class App {
-    public static void main(String[] args) {
-        System.out.println(Version.getVersion());
-        WindowManager window = new WindowManager("Engine", 1920, 1080, false);
-        window.init();
+    private static WindowManager window;
+    private static EngineManager engine;
 
-        while (!window.windowShouldClose()) {
-            window.update();
+    private static TestGame game;
+
+    public static void main(String[] args) {
+        window = new WindowManager(Constants.TITLE, 1600, 900, false);
+        game = new TestGame();
+        engine = new EngineManager();
+
+        try {
+            engine.start();
+        } catch (Exception e) {
+            e.printStackTrace();
         }
-        
-        window.cleanup();
+    }
+
+    public static WindowManager getWindow() {
+        return window;
+    }
+
+    public static TestGame getGame() {
+        return game;
     }
 }
