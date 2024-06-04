@@ -7,6 +7,7 @@ import javagl.core.managers.EngineManager;
 import javagl.core.managers.WindowManager;
 import javagl.core.utils.Constants;
 
+/** The main class for the application. */
 public class App {
     // The window object of the app.
     private static WindowManager window;
@@ -17,6 +18,7 @@ public class App {
     // The current game object to run in the window.
     private static TestGame game;
 
+    /** Begins the runtime of the app. */
     public static void main(String[] args) {
         window = new WindowManager(Constants.TITLE, 1600, 900, false);
         game = new TestGame();
@@ -29,10 +31,20 @@ public class App {
         }
     }
 
+    /**
+     * The getter method for the application window object.
+     * 
+     * @return - The application window object.
+     */
     public static WindowManager getWindow() {
         return window;
     }
 
+    /**
+     * The getter method for the game runtime environment.
+     * 
+     * @return - The game environment.
+     */
     public static TestGame getGame() {
         return game;
     }

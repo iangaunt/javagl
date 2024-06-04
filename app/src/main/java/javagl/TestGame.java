@@ -6,6 +6,7 @@ import org.lwjgl.opengl.GL11;
 import javagl.core.Logic;
 import javagl.core.ObjectLoader;
 import javagl.core.entity.Model;
+import javagl.core.entity.Texture;
 import javagl.core.managers.RenderManager;
 import javagl.core.managers.WindowManager;
 
@@ -30,17 +31,23 @@ public class TestGame implements Logic {
         renderer.init();
 
         float[] vertices = {
-            -0.5f, 0.5f, 0f,
+            -0.5f,  0.5f, 0f,
             -0.5f, -0.5f, 0f,
-            0.5f, -0.5f, 0f,
-            0.5f, -0.5f, 0f,
-            0.5f, 0.5f, 0f,
-            -0.5f, 0.5f, 0f
+             0.5f, -0.5f, 0f,
+             0.5f,  0.5f, 0f,
         };
 
         int[] indices = {0, 1, 3, 3, 1, 2};
 
-        model = loader.loadModel(vertices, indices);
+        float[] textureCoords = {
+            0, 0,
+            0, 1, 
+            1, 1, 
+            1, 0
+        };
+
+        model = loader.loadModel(vertices, textureCoords, indices);
+        model.setTexture(new Texture(loader.loadTexture("textures/cobblestone.png")));
     }
 
     @Override

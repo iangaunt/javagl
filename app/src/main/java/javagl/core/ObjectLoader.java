@@ -1,5 +1,6 @@
 package javagl.core;
 
+import java.nio.ByteBuffer;
 import java.nio.FloatBuffer;
 import java.nio.IntBuffer;
 import java.util.ArrayList;
@@ -9,6 +10,8 @@ import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL15;
 import org.lwjgl.opengl.GL20;
 import org.lwjgl.opengl.GL30;
+import org.lwjgl.stb.STBImage;
+import org.lwjgl.system.MemoryStack;
 
 import javagl.core.entity.Model;
 import javagl.core.utils.Utils;
@@ -20,6 +23,8 @@ public class ObjectLoader {
     // A list of VBOs (vertex buffer objects).
     private List<Integer> vbos = new ArrayList<Integer>();
 
+    private List<Integer> textures = new ArrayList<Integer>();
+
     /**
      * Loads a model from a set of vertices and a set
      * of indices, which tells the computer which order to 
@@ -29,17 +34,51 @@ public class ObjectLoader {
      * @param indices - The order of vertices to render in the "vertices" array.
      * @return - The completed Model object.
      */
-    public Model loadModel(float[] vertices, int[] indices) {
+    public Model loadModel(float[] vertices, float[] textureCoords, int[] indices) {
         // Creates a new VAO with a new ID.
         int id = createVAO();
 
         // Stores the indices in a buffer and then makes an attribute list. 
         storeIndicesBuffer(indices);
         storeDataInAttributeList(0, 3, vertices);
+        storeDataInAttributeList(1, 2, textureCoords);
         unbind();
 
         // Returns a new model with the proper amount of vertices.
-        return new Model(id, vertices.length / 3);
+        return new Model(id, indices.length);
+    }
+
+    public int loadTexture(String filename) throws Exception {
+        int width, height;
+        ByteBuffer buffer;
+        try (
+            MemoryStack stack = MemoryStack.stackPush()
+        ) {
+            IntBuffer w = stack.mallocInt(1);
+            IntBuffer h = stack.mallocInt(1);
+            IntBuffer c = stack.mallocInt(1);
+
+            buffer = STBImage.stbi_load(filename, w, h, c, 4);
+            if (buffer == null) throw new Exception("Image file " + filename + " unable to be loaded");
+
+            width = w.get();
+            height = h.get();
+        }
+
+        int id = GL11.glGenTextures();
+        textures.add(id);
+        GL11.glBindTexture(GL11.GL_TEXTURE_2D, id);
+        GL11.glPixelStorei(GL11.GL_UNPACK_ALIGNMENT, 1);
+        GL11.glTexImage2D(
+            GL11.GL_TEXTURE_2D, 0, GL11.GL_RGBA, 
+            width, height, 0, 
+            GL11.GL_RGBA, GL11.GL_UNSIGNED_BYTE, buffer
+        );
+
+        GL30.glGenerateMipmap(GL11.GL_TEXTURE_2D);
+        STBImage.stbi_image_free(buffer);
+
+        return id;
     }
 
     /**
@@ -100,5 +139,6 @@ public class ObjectLoader {
     public void cleanup() {
         for (int vao : vaos) GL30.glDeleteVertexArrays(vao);
         for (int vbo : vbos) GL30.glDeleteBuffers(vbo);
+        for (int tex : textures) GL11.glDeleteTextures(tex);
     }
 }

@@ -1,6 +1,7 @@
 package javagl.core.managers;
 
 import org.lwjgl.opengl.GL11;
+import org.lwjgl.opengl.GL13;
 import org.lwjgl.opengl.GL20;
 import org.lwjgl.opengl.GL30;
 
@@ -30,6 +31,7 @@ public class RenderManager {
         shader.createFragmentShader(Utils.loadResource("/shaders/fragment.fs"));
 
         shader.link();
+        shader.createUniform("textureSampler");
     }
 
     /**
@@ -43,14 +45,20 @@ public class RenderManager {
         clear();
         
         shader.bind();
+        shader.setUniform("textureSampler", 0);
 
         // Binds the model's vertex array to the GL context.
         GL30.glBindVertexArray(model.getId());
-        GL30.glEnableVertexAttribArray(0);
-        
+        GL20.glEnableVertexAttribArray(0);
+        GL20.glEnableVertexAttribArray(1);
+
+        GL13.glActiveTexture(GL13.GL_TEXTURE0);
+        GL11.glBindTexture(GL11.GL_TEXTURE_2D, model.getTexture().getId());
+
         // Draws the vertex array using GL_TRIANGLES and unbinds the vertex attribute array.
-        GL11.glDrawArrays(GL11.GL_TRIANGLES, 0, model.getVertexCount());
+        GL11.glDrawElements(GL11.GL_TRIANGLES, model.getVertexCount(), GL11.GL_UNSIGNED_INT, 0);
         GL20.glDisableVertexAttribArray(0);
+        GL20.glDisableVertexAttribArray(1);
 
         // Unbinds the model's vertex array from the GL context.
         GL30.glBindVertexArray(0);
