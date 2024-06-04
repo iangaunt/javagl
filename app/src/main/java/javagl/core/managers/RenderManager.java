@@ -27,10 +27,14 @@ public class RenderManager {
     public void init() throws Exception {
         shader = new ShaderManager();
         
+        // Creates two new shaders (vertex + fragment).
         shader.createVertexShader(Utils.loadResource("/shaders/vertex.vs"));
         shader.createFragmentShader(Utils.loadResource("/shaders/fragment.fs"));
 
+        // Links the shader to the window.
         shader.link();
+
+        // Creates a new uniform for the texture sampler.
         shader.createUniform("textureSampler");
     }
 
@@ -44,6 +48,7 @@ public class RenderManager {
         // Clears the current GL11 buffer.
         clear();
         
+        // Sets the value of the texture sampler and binds the shader.
         shader.bind();
         shader.setUniform("textureSampler", 0);
 
@@ -52,6 +57,7 @@ public class RenderManager {
         GL20.glEnableVertexAttribArray(0);
         GL20.glEnableVertexAttribArray(1);
 
+        // Binds the model's texture to the GL context.
         GL13.glActiveTexture(GL13.GL_TEXTURE0);
         GL11.glBindTexture(GL11.GL_TEXTURE_2D, model.getTexture().getId());
 
@@ -63,6 +69,7 @@ public class RenderManager {
         // Unbinds the model's vertex array from the GL context.
         GL30.glBindVertexArray(0);
 
+        // Unbinds the shader.
         shader.unbind();
     }
 

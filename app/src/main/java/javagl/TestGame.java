@@ -1,5 +1,7 @@
 package javagl;
 
+import java.io.File;
+
 import org.lwjgl.glfw.GLFW;
 import org.lwjgl.opengl.GL11;
 
@@ -47,7 +49,7 @@ public class TestGame implements Logic {
         };
 
         model = loader.loadModel(vertices, textureCoords, indices);
-        model.setTexture(new Texture(loader.loadTexture("textures/cobblestone.png")));
+        model.setTexture(new Texture(loader.loadTexture("C:\\Users\\ianga\\Desktop\\Codespaces\\javagl\\app\\src\\main\\resources\\textures\\cobblestone.png")));
     }
 
     @Override

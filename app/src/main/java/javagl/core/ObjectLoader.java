@@ -16,6 +16,7 @@ import org.lwjgl.system.MemoryStack;
 import javagl.core.entity.Model;
 import javagl.core.utils.Utils;
 
+/** The main class for loading objects, such as VAOs, VBOs, and textures. */
 public class ObjectLoader {
     // A list of VAOs (vertex array objects).
     private List<Integer> vaos = new ArrayList<Integer>();
@@ -23,6 +24,7 @@ public class ObjectLoader {
     // A list of VBOs (vertex buffer objects).
     private List<Integer> vbos = new ArrayList<Integer>();
 
+    // A list of texture IDs.
     private List<Integer> textures = new ArrayList<Integer>();
 
     /**
@@ -48,36 +50,64 @@ public class ObjectLoader {
         return new Model(id, indices.length);
     }
 
+    /**
+     * Loads a new texture from the specified filename. 
+     * 
+     * Note that the texture has to be located 
+     * absolutely in the filepath as of right now due to 
+     * stbi_load's implementation.
+     * 
+     * @param filename - The filename of the texture to load.
+     * @return - The ID of the texture loaded.
+     * @throws Exception - Any exception thrown during loading the file or allocating memory.
+     */
     public int loadTexture(String filename) throws Exception {
+        // The width and height of the texture.
         int width, height;
+
+        // A buffer for storing the bytes of the image.
         ByteBuffer buffer;
+
+        // Attempts to allocate memory for texture dimensions and channels.
         try (
             MemoryStack stack = MemoryStack.stackPush()
         ) {
+            // Stores the width, height, and channels of the texture.
             IntBuffer w = stack.mallocInt(1);
             IntBuffer h = stack.mallocInt(1);
             IntBuffer c = stack.mallocInt(1);
 
+            // Attempts to load the bytes from the filename.
             buffer = STBImage.stbi_load(filename, w, h, c, 4);
             if (buffer == null) throw new Exception("Image file " + filename + " unable to be loaded");
 
+            // Fetches the width and height of the texture from their respective buffers.
             width = w.get();
             height = h.get();
         }
 
+        // Generates a new texture ID for the new texture.
         int id = GL11.glGenTextures();
         textures.add(id);
+        
+        // Binds the texture to the GL11 context.
         GL11.glBindTexture(GL11.GL_TEXTURE_2D, id);
         GL11.glPixelStorei(GL11.GL_UNPACK_ALIGNMENT, 1);
+
+        // Generates a new texture from the width, height, and buffer contents.
         GL11.glTexImage2D(
             GL11.GL_TEXTURE_2D, 0, GL11.GL_RGBA, 
             width, height, 0, 
             GL11.GL_RGBA, GL11.GL_UNSIGNED_BYTE, buffer
         );
 
+        // Generates mipmaps for the new texture.
         GL30.glGenerateMipmap(GL11.GL_TEXTURE_2D);
+
+        // Frees up the memory of the image buffer.
         STBImage.stbi_image_free(buffer);
 
+        // Returns the new ID of the texture.
         return id;
     }
 
@@ -135,7 +165,7 @@ public class ObjectLoader {
         GL30.glBindVertexArray(0);
     }
 
-    /** Deletes all active VAO and VBO objects. */
+    /** Deletes all active VAO, VBO, and texture objects. */
     public void cleanup() {
         for (int vao : vaos) GL30.glDeleteVertexArrays(vao);
         for (int vbo : vbos) GL30.glDeleteBuffers(vbo);

@@ -29,6 +29,13 @@ public class ShaderManager {
         uniforms = new HashMap<String, Integer>();
     }
 
+    /**
+     * Creates a new uniform, allowing information to be exchanged between
+     * the shaders and the main program.
+     * 
+     * @param uniformName - The name of the uniform to access in memory.
+     * @throws Exception - An exception caused by getting or setting the uniform value.
+     */
     public void createUniform(String uniformName) throws Exception {
         int uniformLocation = GL20.glGetUniformLocation(programID, uniformName);
         if (uniformLocation < 0) throw new Exception("Could not find the uniform " + uniformName);
@@ -36,6 +43,12 @@ public class ShaderManager {
         uniforms.put(uniformName, uniformLocation);
     }
 
+    /**
+     * A setter method for a uniform with a Matrix4f value.
+     * 
+     * @param uniformName - The name of the uniform to access.
+     * @param value - The Matrix4f value to set the uniform to.
+     */
     public void setUniform(String uniformName, Matrix4f value) {
         try (
             MemoryStack stack = MemoryStack.stackPush()
@@ -47,6 +60,12 @@ public class ShaderManager {
         }
     }
 
+    /**
+     * A setter method for a uniform with an int value.
+     * 
+     * @param uniformName - The name of the uniform to access.
+     * @param value - The int value to set the uniform to.
+     */
     public void setUniform(String uniformName, int value) {
         GL20.glUniform1i(uniforms.get(uniformName), value);
     }
@@ -97,16 +116,20 @@ public class ShaderManager {
     }
 
     /**
-     * Links the vertex shaders and fragment shaders to the program 
-     * @throws Exception
+     * Links the vertex shaders and fragment shaders to the program.
+     * 
+     * @throws Exception - An exception caused by linking or validating shader code.
      */
     public void link() throws Exception {
+        // Links the shader program to the program ID.
         GL20.glLinkProgram(programID);
         if (GL20.glGetProgrami(programID, GL20.GL_LINK_STATUS) == 0) throw new Exception("Error linking shader code");
 
+        // Detaches the shaders once they are linked.
         if (vertexShaderID != 0) GL20.glDetachShader(programID, vertexShaderID);
         if (fragmentShaderID != 0) GL20.glDetachShader(programID, fragmentShaderID);
 
+        // Validates the shader program, checking its compilation status.
         GL20.glValidateProgram(programID);
         if (GL20.glGetProgrami(programID, GL20.GL_VALIDATE_STATUS) == 0) 
             throw new Exception("Unable to validate shader code");

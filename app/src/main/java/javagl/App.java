@@ -20,7 +20,7 @@ public class App {
 
     /** Begins the runtime of the app. */
     public static void main(String[] args) {
-        window = new WindowManager(Constants.TITLE, 1600, 900, false);
+        window = new WindowManager(Constants.TITLE, 1600, 1600, false);
         game = new TestGame();
         engine = new EngineManager();
 
