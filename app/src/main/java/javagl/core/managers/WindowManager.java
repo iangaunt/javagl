@@ -125,11 +125,13 @@ public class WindowManager {
         GL11.glCullFace(GL11.GL_BACK);
     }
 
+    /** Updates the window content. */
     public void update() {
         GLFW.glfwSwapBuffers(window);
         GLFW.glfwPollEvents();
     }
 
+    /** Cleans up the window by destroying it. */
     public void cleanup() {
         GLFW.glfwDestroyWindow(window);
     }
@@ -146,50 +148,108 @@ public class WindowManager {
         return mat.setPerspective(FOV, aspectRatio, Z_NEAR, Z_FAR);
     }
 
+    /** Sets the clear color of the window. */
     public void setClearColor(float r, float g, float b, float a) {
         GL11.glClearColor(r, g, b, a);
     }
 
+    /**
+     * Checks to see if a key on the keyboard is being pressed
+     * in the context of the window.
+     * 
+     * @param key - The keycode of the desired key.
+     * @return - If the key is being pressed or not.
+     */
     public boolean isKeyPressed(int key) {
         return GLFW.glfwGetKey(window, key) == GLFW.GLFW_PRESS;
     }
 
+    /**
+     * Checks to see if the window is closing.
+     * 
+     * @return - If the window should close.
+     */
     public boolean windowShouldClose() {
         return GLFW.glfwWindowShouldClose(window);
     }
 
+    /**
+     * The getter method for the title of the window.
+     * 
+     * @return - The title of the window.
+     */
     public String getTitle() {
         return title;
     }
 
+    /**
+     * The setter method for the title of the window.
+     * 
+     * @param title - The new title of the window.
+     */
     public void setTitle(String title) {
         GLFW.glfwSetWindowTitle(window, title);
     }
 
+    /**
+     * The getter method for the VSync toggle.
+     * 
+     * @return - The current state of the VSync togle.
+     */
     public boolean getVSync() {
         return vSync;
     }
 
+    /**
+     * The getter method for the resize tag.
+     * 
+     * @return - The current state of the resize tag.
+     */
     public boolean getResize() {
         return resize; 
     }
 
+    /**
+     * The setter method for the resize tag.
+     * 
+     * @param resize - The new state of the resize tag.
+     */
     public void setResize(boolean resize) {
         this.resize = resize; 
     }
 
+    /**
+     * The getter method for the width of the window.
+     * 
+     * @return - The width of the window.
+     */
     public int getWidth() {
         return width;
     }
 
+    /**
+     * The getter method for the height of the window.
+     * 
+     * @return - The height of the window.
+     */
     public int getHeight() {
         return height; 
     }
 
+    /**
+     * The getter method for the window.
+     * 
+     * @return - The window.
+     */
     public long getWindow() {
         return window;
     }
 
+    /**
+     * The getter method for the projection matrix.
+     * 
+     * @return - The current projection matrix.
+     */
     public Matrix4f getProjectionMatrix() {
         return projectionMatrix;
     }

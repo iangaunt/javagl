@@ -3,16 +3,18 @@
  */
 package javagl;
 
-import org.lwjgl.Version;
-
 import javagl.core.managers.EngineManager;
 import javagl.core.managers.WindowManager;
 import javagl.core.utils.Constants;
 
 public class App {
+    // The window object of the app.
     private static WindowManager window;
+
+    // The engine object of the app.
     private static EngineManager engine;
 
+    // The current game object to run in the window.
     private static TestGame game;
 
     public static void main(String[] args) {

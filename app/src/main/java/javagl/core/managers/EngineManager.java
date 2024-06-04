@@ -31,6 +31,9 @@ public class EngineManager {
     // Creates a new set of Logic rules to run.
     private Logic gameLogic;
 
+    /** A basic constructor with no member variables. */
+    public EngineManager() {}
+
     /**
      * Starts the window and sets up the error callback.
      * 

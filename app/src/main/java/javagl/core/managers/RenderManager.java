@@ -1,7 +1,5 @@
 package javagl.core.managers;
 
-import java.io.File;
-
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL20;
 import org.lwjgl.opengl.GL30;
@@ -58,6 +56,15 @@ public class RenderManager {
         GL30.glBindVertexArray(0);
 
         shader.unbind();
+    }
+
+    /**
+     * Returns the running shader manager of the render engine.
+     * 
+     * @return - The current shader manager.
+     */
+    public ShaderManager getShaderManager() {
+        return shader;
     }
     
     /** Clears the current buffer. */

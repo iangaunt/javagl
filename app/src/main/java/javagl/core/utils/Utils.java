@@ -43,10 +43,16 @@ public class Utils {
         return buffer;
     }
 
+    /**
+     * Loads a resource from the filename parameter and returns a scanner input buffer
+     * of the contents of the file.
+     * 
+     * @param filename - The location of the file to read.
+     * @return - The delimited contents of the file.
+     * @throws Exception - An error caused by file location or reading of the file.
+     */
     public static String loadResource(String filename) throws Exception {
         String result;
-
-        System.out.println(Utils.class.getResourceAsStream(filename));
 
         try (
             InputStream in = Utils.class.getResourceAsStream(filename);

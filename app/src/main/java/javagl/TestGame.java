@@ -78,4 +78,8 @@ public class TestGame implements Logic {
         renderer.cleanup();
         loader.cleanup();
     }
+
+    public RenderManager getRenderManager() {
+        return renderer;
+    }
 }
