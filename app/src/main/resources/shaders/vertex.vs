@@ -5,7 +5,7 @@ in vec2 textureCoords;
 
 out vec2 fragTextureCoords;
 
-uniform float time = 0.0f;
+uniform float time;
 
 void main() {
     gl_Position = vec4(position, 1.0);

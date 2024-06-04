@@ -11,6 +11,8 @@ import javagl.core.entity.Model;
 import javagl.core.entity.Texture;
 import javagl.core.managers.RenderManager;
 import javagl.core.managers.WindowManager;
+import javagl.core.ui.UI;
+import javagl.core.ui.UITemplate;
 
 public class TestGame implements Logic {
     private int direction = 0;
@@ -22,34 +24,26 @@ public class TestGame implements Logic {
 
     private Model model;
 
+    UI ui;
+
     public TestGame() {
         renderer = new RenderManager();
         window = App.getWindow();
         loader = new ObjectLoader();
+
+        ui = new UI(loader);
     }
 
     @Override
     public void init() throws Exception {
         renderer.init();
 
-        float[] vertices = {
-            -0.5f,  0.5f, 0f,
-            -0.5f, -0.5f, 0f,
-             0.5f, -0.5f, 0f,
-             0.5f,  0.5f, 0f,
-        };
+        // model = loader.loadModel(vertices, textureCoords, indices);
+        // model.setTexture(new Texture(loader.loadTexture("C:\\Users\\ianga\\Desktop\\Codespaces\\javagl\\app\\src\\main\\resources\\textures\\cobblestone.png")));
 
-        int[] indices = {0, 1, 3, 3, 1, 2};
+        model = ui.renderUI(new UITemplate(0.4f, 0.1f, 0.2f, 0.6f));
 
-        float[] textureCoords = {
-            0, 0,
-            0, 1, 
-            1, 1, 
-            1, 0
-        };
-
-        model = loader.loadModel(vertices, textureCoords, indices);
-        model.setTexture(new Texture(loader.loadTexture("C:\\Users\\ianga\\Desktop\\Codespaces\\javagl\\app\\src\\main\\resources\\textures\\cobblestone.png")));
+        System.out.println("initialized");
     }
 
     @Override

@@ -59,7 +59,7 @@ public class RenderManager {
 
         // Binds the model's texture to the GL context.
         GL13.glActiveTexture(GL13.GL_TEXTURE0);
-        GL11.glBindTexture(GL11.GL_TEXTURE_2D, model.getTexture().getId());
+        if (model.getTexture() != null) GL11.glBindTexture(GL11.GL_TEXTURE_2D, model.getTexture().getId());
 
         // Draws the vertex array using GL_TRIANGLES and unbinds the vertex attribute array.
         GL11.glDrawElements(GL11.GL_TRIANGLES, model.getVertexCount(), GL11.GL_UNSIGNED_INT, 0);
